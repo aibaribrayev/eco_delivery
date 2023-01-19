@@ -2,7 +2,9 @@ import { useState } from "react";
 
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 
-import { Map } from "../../modules";
+import { Map, SearchAddress } from "../../modules";
+import "./MapPage.sass";
+
 const render = (status) => {
     return <h1>{status}</h1>;
 };
@@ -40,6 +42,9 @@ const MapPage = () => {
                     {/* {clicks.map((latLng, i) => ( */}
                     {/* <Marker key={i} position={latLng} /> */}
                     {/* ))} */}
+                    <div className="map__container">
+                        <SearchAddress />
+                    </div>
                 </Map>
             </Wrapper>
         </div>

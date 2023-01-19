@@ -1,2 +1,4 @@
 import Map from "./Map/Map";
-export { Map };
+import SearchAddress from "./SearchAdress/SearchAddress";
+
+export { Map, SearchAddress };

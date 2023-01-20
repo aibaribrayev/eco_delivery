@@ -1,52 +1,38 @@
 import { useState } from "react";
 
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
-import { Map, SearchAddress } from "../../modules";
+import { SearchAddress } from "../../modules";
 import "./MapPage.sass";
 
-const render = (status) => {
-    return <h1>{status}</h1>;
-};
+const center = { lat: 48.8584, lng: 2.2945 };
 
 const MapPage = () => {
-    const [clicks, setClicks] = useState([]);
-    const [zoom, setZoom] = useState(3);
-    const [center, setCenter] = useState({
-        lat: 49.5219664,
-        lng: 68.6505615,
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: "AIzaSyBgTcFoIhWsin6cdfqBwQS7TNbmC1iTPRM",
+        libraries: ["places"],
     });
-
-    const onClick = (e) => {
-        setClicks([...clicks, e.latLng]);
-    };
-
-    const onIdle = (m) => {
-        setZoom(m?.getZoom());
-        setCenter(m?.getCenter()?.toJSON());
-    };
+    const [map, setMap] = useState(/** @type google.maps.Map */ (null));
+    if (!isLoaded) return <>Loading</>;
 
     return (
         <div style={{ display: "flex", height: "100vh" }}>
-            <Wrapper
-                apiKey="AIzaSyBgTcFoIhWsin6cdfqBwQS7TNbmC1iTPRM"
-                render={render}
+            <GoogleMap
+                center={center}
+                zoom={15}
+                mapContainerStyle={{ width: "100%", height: "100%" }}
+                options={{
+                    zoomControl: false,
+                    streetViewControl: false,
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                }}
+                onLoad={(map) => setMap(map)}
             >
-                <Map
-                    center={center}
-                    onClick={onClick}
-                    onIdle={onIdle}
-                    zoom={zoom}
-                    style={{ flexGrow: "1", height: "100%" }}
-                >
-                    {/* {clicks.map((latLng, i) => ( */}
-                    {/* <Marker key={i} position={latLng} /> */}
-                    {/* ))} */}
-                    <div className="map__container">
-                        <SearchAddress />
-                    </div>
-                </Map>
-            </Wrapper>
+                <div className="map__container">
+                    <SearchAddress />
+                </div>
+            </GoogleMap>
         </div>
     );
 };

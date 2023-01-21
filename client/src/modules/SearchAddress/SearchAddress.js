@@ -14,7 +14,12 @@ const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
     const [items, setItems] = useState([]);
 
     const [placeRef, setPlaceRef] = useState();
+    const [clientRef, setClientRef] = useState();
+    const [lat, setLat] = useState(0);
+    const [lng, setLng] = useState(0);
     const google = window.google;
+
+    const [searchResult, setSearchResult] = useState("Result: none");
 
     const getCurrentPlace = () => {
         if (placeRef.current.value === "") return;
@@ -57,16 +62,48 @@ const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
     const handleDone = () => {
         setAddresses((prev) => [
             ...prev,
-            { id: uuidv4(), address: placeRef.current.value, items: items },
+            {
+                id: uuidv4(),
+                address: placeRef.current.value,
+                items: items,
+                client: clientRef.current.value,
+                lat: lat,
+                lng: lng,
+            },
         ]);
         handleCancel();
     };
+
+    const handleChange = () => {
+        if (searchResult != null) {
+            //variable to store the result
+            const place = searchResult.getPlace();
+
+            setLat(place.geometry.location.lat());
+            setLng(place.geometry.location.lng());
+            //variable to store the name from place details result
+            const name = place.name;
+            //variable to store the status from place details result
+            const status = place.business_status;
+            //variable to store the formatted address from place details result
+            const formattedAddress = place.formatted_address;
+            // console.log(place);
+            //console log all results
+            console.log(`Name: ${name}`);
+            console.log(`Business Status: ${status}`);
+            console.log(`Formatted Address: ${formattedAddress}`);
+        }
+    };
+
+    function onLoad(autocomplete) {
+        setSearchResult(autocomplete);
+    }
 
     return (
         <div className="search-address">
             <div className="search-address__header">Введите Адрес</div>
             <div className="search-address__form">
-                <Autocomplete>
+                <Autocomplete onPlaceChanged={handleChange} onLoad={onLoad}>
                     <Input
                         placeholder="Адрес доставки"
                         style={{ marginBottom: "20px" }}
@@ -85,6 +122,18 @@ const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
                     </div>
                 ) : (
                     <>
+                        <div
+                            className="search-address__form__el_jc-spbt"
+                            style={{ marginBottom: "20px" }}
+                        >
+                            <Input
+                                placeholder="Заказчик"
+                                style={{ width: "60%" }}
+                                label="Заказчик"
+                                name="client"
+                                setRef={setClientRef}
+                            />
+                        </div>
                         <SearchAddressAddItem setItems={setItems} />
 
                         <SearchAddressItemList

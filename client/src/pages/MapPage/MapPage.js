@@ -7,7 +7,12 @@ import {
     DirectionsRenderer,
 } from "@react-google-maps/api";
 
-import { SearchAddress, DeliveryAddresses, TruckNumber } from "../../modules";
+import {
+    SearchAddress,
+    DeliveryAddresses,
+    TruckNumber,
+    ShowTrucks,
+} from "../../modules";
 
 import "./MapPage.sass";
 
@@ -26,6 +31,8 @@ const MapPage = () => {
     const [directionsResponse, setDirectionsResponse] = useState(null);
 
     if (!isLoaded) return <>Loading</>;
+
+    console.log(addresses);
 
     return (
         <div style={{ display: "flex", height: "100vh" }}>
@@ -46,13 +53,13 @@ const MapPage = () => {
                     {directionsResponse && (
                         <DirectionsRenderer directions={directionsResponse} />
                     )}
-                    {addressesAdded ? (
+                    {addressesAdded && !numberOfTrucks ? (
                         <div className="map__container-center">
                             <TruckNumber
                                 setNumberOfTracks={setNumberOfTrucks}
                             />
                         </div>
-                    ) : (
+                    ) : !numberOfTrucks ? (
                         <>
                             <div className="map__container-right">
                                 <SearchAddress
@@ -74,6 +81,10 @@ const MapPage = () => {
                                 <></>
                             )}
                         </>
+                    ) : (
+                        <div className="map__container-right">
+                            <ShowTrucks numberOfTrucks={numberOfTrucks} />
+                        </div>
                     )}
                 </>
             </GoogleMap>

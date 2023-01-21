@@ -73,7 +73,7 @@ const DeliveryAddressesItem = ({
 
             <div className="search-address__item-list__headers">
                 <div className="search-address__item-list__header">
-                    {address.address}
+                    {address.client}
                 </div>
             </div>
 

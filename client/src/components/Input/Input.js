@@ -2,7 +2,15 @@ import { useRef, useEffect } from "react";
 
 import "./Input.sass";
 
-const Input = ({ placeholder, name, label, setRef, ...props }) => {
+const Input = ({
+    placeholder,
+    name,
+    label,
+    type,
+    setRef,
+    styleType,
+    ...props
+}) => {
     const inputRef = useRef();
 
     useEffect(() => {
@@ -19,9 +27,12 @@ const Input = ({ placeholder, name, label, setRef, ...props }) => {
                 </label>
             )}
             <input
-                className="input__main"
+                className={`input__main ${
+                    styleType === "sign" ? "input__main_sign" : ""
+                }`}
                 name={name}
                 placeholder={placeholder}
+                type={type}
                 ref={inputRef}
             />
         </div>

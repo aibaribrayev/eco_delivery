@@ -1,8 +1,14 @@
 import { useState } from "react";
 
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import {
+    GoogleMap,
+    useJsApiLoader,
+    Marker,
+    DirectionsRenderer,
+} from "@react-google-maps/api";
 
-import { SearchAddress } from "../../modules";
+import { SearchAddress, DeliveryAddresses, TruckNumber } from "../../modules";
+
 import "./MapPage.sass";
 
 const center = { lat: 48.8584, lng: 2.2945 };
@@ -13,7 +19,15 @@ const MapPage = () => {
         libraries: ["places"],
     });
     const [map, setMap] = useState(/** @type google.maps.Map */ (null));
+
+    const [addresses, setAddresses] = useState([]);
+    const [addressesAdded, setAddressesAdded] = useState(false);
+    const [numberOfTrucks, setNumberOfTrucks] = useState(0);
+    const [directionsResponse, setDirectionsResponse] = useState(null);
+
     if (!isLoaded) return <>Loading</>;
+
+    console.log(numberOfTrucks);
 
     return (
         <div style={{ display: "flex", height: "100vh" }}>
@@ -29,9 +43,41 @@ const MapPage = () => {
                 }}
                 onLoad={(map) => setMap(map)}
             >
-                <div className="map__container">
-                    <SearchAddress />
-                </div>
+                <>
+                    <Marker position={center} />
+                    {directionsResponse && (
+                        <DirectionsRenderer directions={directionsResponse} />
+                    )}
+                    {addressesAdded ? (
+                        <div className="map__container-center">
+                            <TruckNumber
+                                setNumberOfTracks={setNumberOfTrucks}
+                            />
+                        </div>
+                    ) : (
+                        <>
+                            <div className="map__container-right">
+                                <SearchAddress
+                                    setAddresses={setAddresses}
+                                    setDirectionsResponse={
+                                        setDirectionsResponse
+                                    }
+                                />
+                            </div>
+                            {addresses.length ? (
+                                <div className="map__container-left">
+                                    <DeliveryAddresses
+                                        addresses={addresses}
+                                        setAddresses={setAddresses}
+                                        setAddressesAdded={setAddressesAdded}
+                                    />
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+                        </>
+                    )}
+                </>
             </GoogleMap>
         </div>
     );

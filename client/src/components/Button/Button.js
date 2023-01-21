@@ -1,10 +1,14 @@
 import "./Button.sass";
 
-const Button = ({ text, type, action }) => {
+const Button = ({ text, type, action, styleType, ...props }) => {
     return (
         <button
-            className={`button ${type === "outline" ? "button_outline" : ""}`}
+            className={`button ${
+                styleType === "outline" ? "button_outline" : ""
+            }`}
             onClick={action}
+            type={type}
+            {...props}
         >
             {text}
         </button>

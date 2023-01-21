@@ -1,14 +1,23 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { Button, Input } from "../../../components";
 
-const SearchAddressAddItem = () => {
+const SearchAddressAddItem = ({ setItems }) => {
     const handleItem = (e) => {
         e.preventDefault();
 
-        console.log(e.target);
+        setItems((prev) => [
+            ...prev,
+            {
+                id: uuidv4(),
+                item_name: e.target.item_name.value,
+                item_weight: +e.target.item_weight.value,
+            },
+        ]);
     };
 
     return (
-        <>
+        <form onSubmit={handleItem}>
             <div
                 className="search-address__form__el_jc-spbt"
                 style={{ marginBottom: "20px" }}
@@ -26,10 +35,10 @@ const SearchAddressAddItem = () => {
                     style={{ width: "30%" }}
                 />
             </div>
-            <div className="search-address__form__el search-address__form__el_js-flend">
-                <Button text="Добавить" type="outline" action={handleItem} />
+            <div className="search-address__form__el search-address__form__el_jc-flend">
+                <Button text="Добавить" type="submit" styleType="outline" />
             </div>
-        </>
+        </form>
     );
 };
 

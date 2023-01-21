@@ -2,7 +2,20 @@
     position: relative
 
     &__container
-        position: absolute
 
-        top: 10%
-        right: 10%
+        &-left
+            position: absolute
+            top: 5%
+            left: 5%
+
+        &-right
+            position: absolute
+            top: 5%
+            right: 5%
+
+        &-center
+            position: absolute
+            top: 50%
+            left: 50%
+
+            transform: translate(-50%, -50%)

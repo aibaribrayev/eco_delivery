@@ -27,8 +27,6 @@ const MapPage = () => {
 
     if (!isLoaded) return <>Loading</>;
 
-    console.log(numberOfTrucks);
-
     return (
         <div style={{ display: "flex", height: "100vh" }}>
             <GoogleMap

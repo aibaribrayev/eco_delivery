@@ -10,8 +10,8 @@ const SearchAddressItemList = ({ items, setItems }) => {
             const temp = prev;
             const index = temp.findIndex((item) => item.id === id);
 
-            const leftSide = temp.splice(0, index);
-            const rightSide = temp.splice(index + 1, temp.length);
+            const leftSide = temp.slice(0, index);
+            const rightSide = temp.slice(index + 1, temp.length);
 
             return [...leftSide, ...rightSide];
         });

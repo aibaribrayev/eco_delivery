@@ -24,10 +24,10 @@ const DeliveryAddressesItem = ({
                 (item) => item.id === id
             );
 
-            const leftSide = temp[index].items.splice(0, itemIndex);
-            const rightSide = temp[index].items.splice(
+            const leftSide = temp[index].items.slice(0, itemIndex);
+            const rightSide = temp[index].items.slice(
                 itemIndex + 1,
-                temp.length
+                temp[index].items.length
             );
 
             temp[index].items = [...leftSide, ...rightSide];

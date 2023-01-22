@@ -17,27 +17,22 @@ const ShowTrucks = ({
         if (!paths || !addresses) return;
         const result = [];
 
-        const pathsToAddr = paths.map((path) =>
-            path.map((addr) => addresses[addr])
-        );
-
         for (let i = 0; i < paths.length; i++) {
             result.push({ id: `Машина №${i + 1}`, second: "" });
-            for (let pathToAddr of pathsToAddr) {
-                for (let addr of pathToAddr) {
-                    result.push({
-                        id: `Адрес: ${addr.address}`,
-                        second: `Заказчик: ${addr.client}`,
-                    });
+            for (let addr of paths[i]) {
+                const address = addresses[addr];
+                result.push({
+                    id: `Адрес: ${address.address}`,
+                    second: `Заказчик: ${address.client}`,
+                });
 
-                    for (let item of addr.items) {
-                        result.push({
-                            id: `Товар: ${item.item_name}`,
-                            second: `Вес: ${item.item_weight}`,
-                        });
-                    }
-                    result.push([]);
+                for (let item of address.items) {
+                    result.push({
+                        id: `Товар: ${item.item_name}`,
+                        second: `Вес: ${item.item_weight}`,
+                    });
                 }
+                result.push([]);
             }
             result.push([]);
         }

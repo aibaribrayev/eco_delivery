@@ -73,7 +73,7 @@ const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
                 <Autocomplete onPlaceChanged={handleChange} onLoad={onLoad}>
                     <Input
                         placeholder="Адрес доставки"
-                        style={{ marginBottom: "20px" }}
+                        style={{ marginBottom: "10px" }}
                         setRef={setPlaceRef}
                     />
                 </Autocomplete>
@@ -90,7 +90,7 @@ const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
                     <>
                         <div
                             className="search-address__form__el_jc-spbt"
-                            style={{ marginBottom: "20px" }}
+                            style={{ marginBottom: "10px" }}
                         >
                             <Input
                                 placeholder="Заказчик"

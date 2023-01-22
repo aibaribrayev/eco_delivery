@@ -3,6 +3,7 @@ import DeliveryAddresses from "./DeliveryAddresses/DeliveryAddresses";
 import TruckNumber from "./TruckNumber/TruckNumber";
 import ShowTrucks from "./ShowTrucks/ShowTrucks";
 import DeliveryAddressesItem from "./DeliveryAddresses/comp/DeliveryAddressesItem";
+import Header from "./Header/Header";
 
 export {
     SearchAddress,
@@ -10,4 +11,5 @@ export {
     TruckNumber,
     ShowTrucks,
     DeliveryAddressesItem,
+    Header,
 };

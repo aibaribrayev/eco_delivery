@@ -4,7 +4,12 @@ import DeliveryAddressesItem from "./comp/DeliveryAddressesItem";
 
 import "./DeliveryAddresses.sass";
 
-const DeliveryAddresses = ({ addresses, setAddresses, setAddressesAdded }) => {
+const DeliveryAddresses = ({
+    addresses,
+    setAddresses,
+    setAddressesAdded,
+    showTrucks,
+}) => {
     const handleCancel = () => {
         setAddresses([]);
     };
@@ -25,20 +30,21 @@ const DeliveryAddresses = ({ addresses, setAddresses, setAddressesAdded }) => {
                     />
                 ))}
             </div>
-
-            <div className="search-address__form__el search-address__form__el_jc-spbt">
-                <Button
-                    text="Отмена"
-                    styleType="outline"
-                    style={{ width: "40%" }}
-                    action={handleCancel}
-                />
-                <Button
-                    text="Готово"
-                    style={{ width: "40%" }}
-                    action={handleDone}
-                />
-            </div>
+            {showTrucks && (
+                <div className="search-address__form__el search-address__form__el_jc-spbt">
+                    <Button
+                        text="Отмена"
+                        styleType="outline"
+                        style={{ width: "40%" }}
+                        action={handleCancel}
+                    />
+                    <Button
+                        text="Готово"
+                        style={{ width: "40%" }}
+                        action={handleDone}
+                    />
+                </div>
+            )}
         </div>
     );
 };

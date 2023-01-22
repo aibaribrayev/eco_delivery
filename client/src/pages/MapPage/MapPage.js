@@ -13,6 +13,7 @@ import {
     TruckNumber,
     ShowTrucks,
     DeliveryAddressesItem,
+    Header,
 } from "../../modules";
 
 import "./MapPage.sass";
@@ -26,6 +27,7 @@ const MapPage = () => {
         libraries: ["places"],
     });
     const [map, setMap] = useState(/** @type google.maps.Map */ (null));
+    const [add, setAdd] = useState(false);
 
     const [addresses, setAddresses] = useState([]);
     const [addressesAdded, setAddressesAdded] = useState(false);
@@ -69,6 +71,17 @@ const MapPage = () => {
         }
     }, [paths]);
 
+    useEffect(() => {
+        if (!add) {
+            setAddresses([]);
+            setAddressesAdded(false);
+            setNumberOfTrucks(0);
+            setDirectionsResponse([]);
+            setActiveTruck(0);
+            setPaths(null);
+        }
+    });
+
     if (!isLoaded) {
         return (
             <div className="loader-container">
@@ -99,71 +112,82 @@ const MapPage = () => {
                 }}
                 onLoad={(map) => setMap(map)}
             >
-                <>
-                    {addressesAdded && !numberOfTrucks ? (
-                        <div className="map__container-center">
-                            <TruckNumber
-                                setNumberOfTracks={setNumberOfTrucks}
-                                addresses={addresses}
-                                setPaths={setPaths}
-                            />
-                        </div>
-                    ) : !numberOfTrucks ? (
-                        <>
-                            <div className="map__container-right">
-                                <SearchAddress
-                                    setAddresses={setAddresses}
-                                    setDirectionsResponse={
-                                        setDirectionsResponse
-                                    }
+                <Header add={add} setAdd={setAdd} />
+                {add && (
+                    <>
+                        {addressesAdded && !numberOfTrucks ? (
+                            <div className="map__container-center">
+                                <TruckNumber
+                                    setNumberOfTracks={setNumberOfTrucks}
+                                    addresses={addresses}
+                                    setPaths={setPaths}
                                 />
                             </div>
-                            {addresses.length ? (
-                                <div className="map__container-left">
-                                    <DeliveryAddresses
-                                        addresses={addresses}
-                                        setAddresses={setAddresses}
-                                        setAddressesAdded={setAddressesAdded}
-                                    />
-                                </div>
-                            ) : (
-                                <></>
-                            )}
-                        </>
-                    ) : (
-                        paths && (
+                        ) : !numberOfTrucks ? (
                             <>
-                                <Marker position={center} />
-                                {directionsResponse && (
-                                    <DirectionsRenderer
-                                        directions={
-                                            directionsResponse[activeTruck]
-                                        }
-                                        //draggable={true}
-                                    />
-                                )}
-                                <div
-                                    className="map__container-left"
-                                    style={{ minWidth: "500px" }}
-                                >
-                                    <DeliveryAddressesItem
-                                        address={addresses[activeTruck + 1]}
-                                        setAddresses={setAddresses}
-                                    />
-                                </div>
                                 <div className="map__container-right">
-                                    <ShowTrucks
-                                        numberOfTrucks={numberOfTrucks}
-                                        activeTruck={activeTruck}
-                                        setActiveTruck={setActiveTruck}
-                                        paths={paths}
-                                        addresses={addresses}
+                                    <SearchAddress
+                                        setAddresses={setAddresses}
+                                        setDirectionsResponse={
+                                            setDirectionsResponse
+                                        }
                                     />
                                 </div>
+                                {addresses.length ? (
+                                    <div className="map__container-left">
+                                        <DeliveryAddresses
+                                            addresses={addresses}
+                                            setAddresses={setAddresses}
+                                            setAddressesAdded={
+                                                setAddressesAdded
+                                            }
+                                            showTrucks={true}
+                                        />
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
                             </>
-                        )
-                    )}
-                </>
+                        ) : (
+                            paths && (
+                                <>
+                                    <Marker position={center} />
+                                    {directionsResponse && (
+                                        <DirectionsRenderer
+                                            directions={
+                                                directionsResponse[activeTruck]
+                                            }
+                                            //draggable={true}
+                                        />
+                                    )}
+                                    <div className="map__container-left">
+                                        <DeliveryAddresses
+                                            addresses={paths[activeTruck].map(
+                                                (path) => addresses[path]
+                                            )}
+                                            setAddresses={setAddresses}
+                                            setAddressesAdded={
+                                                setAddressesAdded
+                                            }
+                                            showTrucks={false}
+                                        />
+                                    </div>
+                                    <div className="map__container-right">
+                                        <ShowTrucks
+                                            numberOfTrucks={numberOfTrucks}
+                                            activeTruck={activeTruck}
+                                            setActiveTruck={setActiveTruck}
+                                            paths={paths}
+                                            addresses={addresses}
+                                        />
+                                    </div>
+                                </>
+                            )
+                        )}
+                    </>
+                )}
+
+                <div className="map__footer"></div>
             </GoogleMap>
         </div>
     );

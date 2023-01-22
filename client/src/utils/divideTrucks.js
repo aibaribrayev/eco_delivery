@@ -1,6 +1,29 @@
 import axios from "axios";
 
 const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
+    function compare(a, b) {
+        if (a.total_weight < b.total_weight) {
+            return -1;
+        }
+        if (a.total_weight > b.total_weight) {
+            return 1;
+        }
+        return 0;
+    }
+
+    let weights = [];
+    for (let i = 0; i < addresses.length; i++) {
+        let summ = 0;
+        for (let j = 0; j < addresses[i].items.length; j++) {
+            summ += addresses[i].items[j].item_weight;
+        }
+        weights.push(summ);
+        addresses[i].total_weight = summ;
+    }
+
+    addresses.sort(compare);
+    weights.sort();
+    console.log(weights);
     addresses.unshift({ lat: 43.3176583, lng: 76.971492 });
     let durations = new Array(addresses.length).fill([]);
 
@@ -29,6 +52,8 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
 
     const INF = 1e9;
 
+    const W = 2200;
+
     function findMinimumTime(path, durations) {
         let n = path.length;
 
@@ -41,8 +66,13 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
             }
         }
 
+        for (let i = 0; i < n; i++) {
+            dp[1 << i][i] = durations[0][path[i]];
+        }
+
         for (let mask = 0; mask < 1 << n; mask++) {
             for (let i = 0; i < n; i++) {
+                if (dp[mask][i] == INF) continue;
                 if ((mask & (1 << i)) > 0) {
                     for (let j = 0; j < n; j++) {
                         if ((mask & (1 << j)) == 0) {
@@ -58,11 +88,7 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
         let end = 0;
 
         for (let i = 1; i < n; i++) {
-            if (
-                dp[(1 << n) - 1][i] + durations[0][path[i]] <
-                dp[(1 << n) - 1][end] + durations[0][path[end]]
-            )
-                end = i;
+            if (dp[(1 << n) - 1][i] < dp[(1 << n) - 1][end]) end = i;
         }
 
         let minTime = dp[(1 << n) - 1][end];
@@ -70,7 +96,7 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
         let mask = (1 << n) - 1;
 
         while (end > -1) {
-            reorderedPath.push(end);
+            reorderedPath.push(path[end]);
             mask ^= 1 << end;
 
             let next = -1;
@@ -84,31 +110,44 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
             end = next;
         }
 
-        return [minTime, reorderedPath];
+        return [minTime, reorderedPath.reverse()];
     }
-    function generatePaths(n, m, durations) {
+
+    function generatePaths(n, m, durations, weights) {
         let paths = [];
+        let pathWeights = [];
 
         for (let i = 0; i < m; i++) {
             paths.push([]);
+            pathWeights.push(0);
         }
 
         for (let i = 1; i < n; i++) {
             let randomIndex = Math.floor(Math.random() * m);
+            while (pathWeights[randomIndex] + weights[i - 1] > W) {
+                randomIndex = Math.floor(Math.random() * m);
+            }
+
+            pathWeights[randomIndex] += weights[i - 1];
             paths[randomIndex].push(i);
         }
 
         let T = 0;
 
         for (let path in paths) {
-            let minTime, reorderedPath;
+            var minTime;
+            var reorderedPath;
             [minTime, reorderedPath] = findMinimumTime(path, durations);
             T += minTime;
             path = reorderedPath;
         }
 
+        console.log("paths");
+        console.log(paths);
+
         for (let cycles = 0; cycles < 1000; cycles++) {
             let randomIndex = Math.floor(Math.random() * (n - 1)) + 1;
+            console.log(randomIndex);
             for (let i = 0; i < paths.length; i++) {
                 let isInPath = false,
                     indexInPath;
@@ -132,7 +171,11 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
                     let minTime = T,
                         pathIndex = i;
                     for (let j = 0; j < paths.length; j++) {
-                        if (i != j) {
+                        if (
+                            i != j &&
+                            pathWeights[j] + weights[indexToTransfer - 1] <= W
+                        ) {
+                            curT -= findMinimumTime(paths[j], durations)[0];
                             paths[j].push(indexToTransfer);
                             curT += findMinimumTime(paths[j], durations)[0];
                             if (minTime > curT) {
@@ -141,9 +184,15 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
                             }
                             curT -= findMinimumTime(paths[j], durations)[0];
                             paths[j].pop();
+                            curT += findMinimumTime(paths[j], durations)[0];
                         }
                     }
                     paths[pathIndex].push(indexToTransfer);
+                    paths[pathIndex] = findMinimumTime(
+                        paths[pathIndex],
+                        durations
+                    )[1];
+                    console.log(reorderedPath);
                     T = minTime;
                     break;
                 }
@@ -153,7 +202,12 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
         return paths;
     }
 
-    let paths = generatePaths(addresses.length, numberOfTrucks, durations);
+    let paths = generatePaths(
+        addresses.length,
+        numberOfTrucks,
+        durations,
+        weights
+    );
     console.log(durations);
     console.log(paths);
 

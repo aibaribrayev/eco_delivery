@@ -29,6 +29,7 @@ const MapPage = () => {
     const [addressesAdded, setAddressesAdded] = useState(false);
     const [numberOfTrucks, setNumberOfTrucks] = useState(0);
     const [directionsResponse, setDirectionsResponse] = useState(null);
+    const [activeTruck, setActiveTruck] = useState(0);
 
     if (!isLoaded) return <>Loading</>;
 
@@ -83,7 +84,11 @@ const MapPage = () => {
                         </>
                     ) : (
                         <div className="map__container-right">
-                            <ShowTrucks numberOfTrucks={numberOfTrucks} />
+                            <ShowTrucks
+                                numberOfTrucks={numberOfTrucks}
+                                activeTruck={activeTruck}
+                                setActiveTruck={setActiveTruck}
+                            />
                         </div>
                     )}
                 </>

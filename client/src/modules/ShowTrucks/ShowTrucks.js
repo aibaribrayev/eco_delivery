@@ -1,9 +1,55 @@
 import React from "react";
+import CsvDownloadButton from "react-json-to-csv";
+import { useEffect, useState } from "react";
 
 import "./ShowTrucks.sass";
 
-const ShowTrucks = ({ numberOfTrucks, activeTruck, setActiveTruck }) => {
-    console.log(numberOfTrucks);
+const ShowTrucks = ({
+    numberOfTrucks,
+    activeTruck,
+    setActiveTruck,
+    paths,
+    addresses,
+}) => {
+    const [mockData, setMockData] = useState(null);
+
+    const generateData = () => {
+        if (!paths || !addresses) return;
+        const result = [];
+
+        const pathsToAddr = paths.map((path) =>
+            path.map((addr) => addresses[addr])
+        );
+
+        for (let i = 0; i < paths.length; i++) {
+            result.push({ id: `Машина №${i + 1}`, second: "" });
+            for (let pathToAddr of pathsToAddr) {
+                for (let addr of pathToAddr) {
+                    result.push({
+                        id: `Адрес: ${addr.address}`,
+                        second: `Заказчик: ${addr.client}`,
+                    });
+
+                    for (let item of addr.items) {
+                        result.push({
+                            id: `Товар: ${item.item_name}`,
+                            second: `Вес: ${item.item_weight}`,
+                        });
+                    }
+                    result.push([]);
+                }
+            }
+            result.push([]);
+        }
+
+        setMockData(result);
+    };
+
+    useEffect(() => {
+        generateData();
+    }, [paths, addresses]);
+
+    console.log(mockData);
 
     return (
         <div
@@ -18,6 +64,14 @@ const ShowTrucks = ({ numberOfTrucks, activeTruck, setActiveTruck }) => {
                     : {}
             }
         >
+            <CsvDownloadButton
+                className="button"
+                style={{ width: "200px" }}
+                data={mockData}
+                headers={null}
+            >
+                Скачать данные
+            </CsvDownloadButton>
             {new Array(+numberOfTrucks).fill(0).map((truck, index) => (
                 <div
                     className={`show-trucks__item ${

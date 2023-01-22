@@ -15,8 +15,9 @@ import {
 } from "../../modules";
 
 import "./MapPage.sass";
+import "./loader.css";
 
-const center = { lat: 48.8584, lng: 2.2945 };
+const center = { lat: 43.258227, lng: 76.8890358 };
 
 const MapPage = () => {
     const { isLoaded } = useJsApiLoader({
@@ -32,15 +33,27 @@ const MapPage = () => {
     const [activeTruck, setActiveTruck] = useState(0);
     const [paths, setPaths] = useState(null);
 
-    if (!isLoaded) return <>Loading</>;
+    if (!isLoaded) {
+        return (
+            <div className="loader-container">
+                <span class="loader"></span>
+            </div>
+        );
+    }
 
-    console.log(paths);
+    if (numberOfTrucks && !paths) {
+        return (
+            <div className="loader-container">
+                <span class="loader"></span>
+            </div>
+        );
+    }
 
     return (
         <div style={{ display: "flex", height: "100vh" }}>
             <GoogleMap
                 center={center}
-                zoom={15}
+                zoom={11}
                 mapContainerStyle={{ width: "100%", height: "100%" }}
                 options={{
                     zoomControl: false,
@@ -92,6 +105,8 @@ const MapPage = () => {
                                     numberOfTrucks={numberOfTrucks}
                                     activeTruck={activeTruck}
                                     setActiveTruck={setActiveTruck}
+                                    paths={paths}
+                                    addresses={addresses}
                                 />
                             </div>
                         )

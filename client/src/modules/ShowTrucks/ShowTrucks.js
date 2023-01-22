@@ -49,8 +49,6 @@ const ShowTrucks = ({
         generateData();
     }, [paths, addresses]);
 
-    console.log(mockData);
-
     return (
         <div
             className="show-trucks"

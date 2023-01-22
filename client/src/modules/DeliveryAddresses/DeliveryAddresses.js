@@ -5,18 +5,6 @@ import DeliveryAddressesItem from "./comp/DeliveryAddressesItem";
 import "./DeliveryAddresses.sass";
 
 const DeliveryAddresses = ({ addresses, setAddresses, setAddressesAdded }) => {
-    const handleAddressDelete = (id) => {
-        setAddresses((prev) => {
-            const temp = prev;
-            const index = temp.findIndex((item) => item.id === id);
-
-            const leftSide = temp.slice(0, index);
-            const rightSide = temp.slice(index + 1, temp.length);
-
-            return [...leftSide, ...rightSide];
-        });
-    };
-
     const handleCancel = () => {
         setAddresses([]);
     };
@@ -34,7 +22,6 @@ const DeliveryAddresses = ({ addresses, setAddresses, setAddressesAdded }) => {
                     <DeliveryAddressesItem
                         address={address}
                         setAddresses={setAddresses}
-                        handleAddressDelete={handleAddressDelete}
                     />
                 ))}
             </div>

@@ -12,6 +12,7 @@ import {
     DeliveryAddresses,
     TruckNumber,
     ShowTrucks,
+    DeliveryAddressesItem,
 } from "../../modules";
 
 import "./MapPage.sass";
@@ -100,15 +101,26 @@ const MapPage = () => {
                         </>
                     ) : (
                         paths && (
-                            <div className="map__container-right">
-                                <ShowTrucks
-                                    numberOfTrucks={numberOfTrucks}
-                                    activeTruck={activeTruck}
-                                    setActiveTruck={setActiveTruck}
-                                    paths={paths}
-                                    addresses={addresses}
-                                />
-                            </div>
+                            <>
+                                <div
+                                    className="map__container-left"
+                                    style={{ minWidth: "500px" }}
+                                >
+                                    <DeliveryAddressesItem
+                                        address={addresses[activeTruck + 1]}
+                                        setAddresses={setAddresses}
+                                    />
+                                </div>
+                                <div className="map__container-right">
+                                    <ShowTrucks
+                                        numberOfTrucks={numberOfTrucks}
+                                        activeTruck={activeTruck}
+                                        setActiveTruck={setActiveTruck}
+                                        paths={paths}
+                                        addresses={addresses}
+                                    />
+                                </div>
+                            </>
                         )
                     )}
                 </>

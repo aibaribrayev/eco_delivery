@@ -2,13 +2,21 @@ import { useState, useReducer } from "react";
 
 import SearchAddressItem from "../../SearchAddress/comp/SearchAddressItem";
 
-const DeliveryAddressesItem = ({
-    address,
-    setAddresses,
-    handleAddressDelete,
-}) => {
+const DeliveryAddressesItem = ({ address, setAddresses }) => {
     const [showItems, setShowItems] = useState(false);
     const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    const handleAddressDelete = (id) => {
+        setAddresses((prev) => {
+            const temp = prev;
+            const index = temp.findIndex((item) => item.id === id);
+
+            const leftSide = temp.slice(0, index);
+            const rightSide = temp.slice(index + 1, temp.length);
+
+            return [...leftSide, ...rightSide];
+        });
+    };
 
     const totalWeight = address.items.reduce(
         (accumulator, currentValue) => accumulator + currentValue.item_weight,

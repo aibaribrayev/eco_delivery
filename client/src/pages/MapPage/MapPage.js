@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
     GoogleMap,
@@ -30,9 +30,44 @@ const MapPage = () => {
     const [addresses, setAddresses] = useState([]);
     const [addressesAdded, setAddressesAdded] = useState(false);
     const [numberOfTrucks, setNumberOfTrucks] = useState(0);
-    const [directionsResponse, setDirectionsResponse] = useState(null);
+    const [directionsResponse, setDirectionsResponse] = useState([]);
     const [activeTruck, setActiveTruck] = useState(0);
     const [paths, setPaths] = useState(null);
+
+    const getNav = () => {
+        const google = window.google;
+        var directionsService = new google.maps.DirectionsService();
+        let origin = "улица Федосеева 50a, Алматы, Kazakhstan";
+
+        for (let i = 0; i < paths.length; i++) {
+            if (paths[i].length == 0) continue;
+            let waypts = [];
+            for (let j = 0; j < paths[i].length - 1; j++) {
+                waypts.push({
+                    location: addresses[paths[i][j]].address,
+                    stopover: true,
+                });
+            }
+            var request = {
+                origin: origin,
+                //destination: origin,
+                destination: addresses[paths[i][paths[i].length - 1]].address,
+                waypoints: waypts,
+                travelMode: "DRIVING",
+                optimizeWaypoints: true,
+            };
+            directionsService.route(request, (result, status) => {
+                console.log(result.routes[0].legs[0].duration.text);
+                setDirectionsResponse((prev) => [...prev, result]);
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (isLoaded && paths) {
+            getNav();
+        }
+    }, [paths]);
 
     if (!isLoaded) {
         return (
@@ -65,10 +100,6 @@ const MapPage = () => {
                 onLoad={(map) => setMap(map)}
             >
                 <>
-                    <Marker position={center} />
-                    {directionsResponse && (
-                        <DirectionsRenderer directions={directionsResponse} />
-                    )}
                     {addressesAdded && !numberOfTrucks ? (
                         <div className="map__container-center">
                             <TruckNumber
@@ -102,6 +133,15 @@ const MapPage = () => {
                     ) : (
                         paths && (
                             <>
+                                <Marker position={center} />
+                                {directionsResponse && (
+                                    <DirectionsRenderer
+                                        directions={
+                                            directionsResponse[activeTruck]
+                                        }
+                                        //draggable={true}
+                                    />
+                                )}
                                 <div
                                     className="map__container-left"
                                     style={{ minWidth: "500px" }}

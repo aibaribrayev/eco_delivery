@@ -21,39 +21,6 @@ const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
 
     const [searchResult, setSearchResult] = useState("Result: none");
 
-    const getCurrentPlace = () => {
-        if (placeRef.current.value === "") return;
-        console.log(placeRef.current.value);
-        let origin = "улица Федосеева 50a, Алматы, Kazakhstan";
-        var directionsService = new google.maps.DirectionsService();
-
-        // const icon = {
-        //   url: place.icon,
-        //   size: new google.maps.Size(71, 71),
-        //   origin: new google.maps.Point(0, 0),
-        //   anchor: new google.maps.Point(17, 34),
-        //   scaledSize: new google.maps.Size(25, 25),
-        // };
-        let waypts = [
-            {
-                location:
-                    "Рустем Бесагаш, Talgar Route, Tuzdybastau, Kazakhstan",
-                stopover: true,
-            },
-        ];
-        var request = {
-            origin: origin,
-            destination: placeRef.current.value,
-            //waypoints: waypts,
-            travelMode: "DRIVING",
-            optimizeWaypoints: true,
-        };
-        directionsService.route(request, (result, status) => {
-            console.log(result.routes[0].legs[0].duration.text);
-            setDirectionsResponse(result);
-        });
-    };
-
     const handleCancel = () => {
         setAddressFound(false);
         setItems([]);
@@ -116,7 +83,6 @@ const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
                             text="Поиск"
                             action={() => {
                                 setAddressFound(true);
-                                getCurrentPlace();
                             }}
                         />
                     </div>

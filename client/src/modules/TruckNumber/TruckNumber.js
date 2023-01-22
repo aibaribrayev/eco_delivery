@@ -1,9 +1,17 @@
 import { Input, Button } from "../../components";
+import divideTrucks from "../../utils/divideTrucks";
 
-const TruckNumber = ({ setNumberOfTracks }) => {
+const TruckNumber = ({ setNumberOfTracks, addresses, setPaths }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
-        setNumberOfTracks(e.target.truck_number.value);
+
+        divideTrucks({
+            addresses: addresses,
+            numberOfTrucks: +e.target.truck_number.value,
+            setPaths: setPaths,
+        });
+
+        setNumberOfTracks(+e.target.truck_number.value);
     };
 
     return (

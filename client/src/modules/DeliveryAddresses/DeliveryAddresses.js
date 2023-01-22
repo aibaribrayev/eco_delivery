@@ -21,10 +21,8 @@ const DeliveryAddresses = ({ addresses, setAddresses, setAddressesAdded }) => {
         setAddresses([]);
     };
 
-    const handleDone = () => {
-        localStorage.setItem("addresses", JSON.stringify(addresses));
+    const handleDone = async () => {
         setAddressesAdded(true);
-        handleCancel();
     };
 
     return (

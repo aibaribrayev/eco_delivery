@@ -30,10 +30,11 @@ const MapPage = () => {
     const [numberOfTrucks, setNumberOfTrucks] = useState(0);
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [activeTruck, setActiveTruck] = useState(0);
+    const [paths, setPaths] = useState(null);
 
     if (!isLoaded) return <>Loading</>;
 
-    console.log(addresses);
+    console.log(paths);
 
     return (
         <div style={{ display: "flex", height: "100vh" }}>
@@ -58,6 +59,8 @@ const MapPage = () => {
                         <div className="map__container-center">
                             <TruckNumber
                                 setNumberOfTracks={setNumberOfTrucks}
+                                addresses={addresses}
+                                setPaths={setPaths}
                             />
                         </div>
                     ) : !numberOfTrucks ? (
@@ -83,13 +86,15 @@ const MapPage = () => {
                             )}
                         </>
                     ) : (
-                        <div className="map__container-right">
-                            <ShowTrucks
-                                numberOfTrucks={numberOfTrucks}
-                                activeTruck={activeTruck}
-                                setActiveTruck={setActiveTruck}
-                            />
-                        </div>
+                        paths && (
+                            <div className="map__container-right">
+                                <ShowTrucks
+                                    numberOfTrucks={numberOfTrucks}
+                                    activeTruck={activeTruck}
+                                    setActiveTruck={setActiveTruck}
+                                />
+                            </div>
+                        )
                     )}
                 </>
             </GoogleMap>

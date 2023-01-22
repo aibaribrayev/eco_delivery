@@ -3,11 +3,11 @@ import React from "react";
 import "./ShowTrucks.sass";
 
 const ShowTrucks = ({ numberOfTrucks, activeTruck, setActiveTruck }) => {
+    console.log(numberOfTrucks);
+
     return (
         <div
-            className={`show-trucks ${
-                numberOfTrucks > 10 ? "show-trucks_grid" : ""
-            }`}
+            className="show-trucks"
             style={
                 numberOfTrucks > 10
                     ? {
@@ -15,7 +15,7 @@ const ShowTrucks = ({ numberOfTrucks, activeTruck, setActiveTruck }) => {
                               numberOfTrucks / 10
                           )}, 1fr)`,
                       }
-                    : ""
+                    : {}
             }
         >
             {new Array(+numberOfTrucks).fill(0).map((truck, index) => (

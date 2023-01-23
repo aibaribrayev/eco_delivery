@@ -21,11 +21,13 @@ import "./loader.css";
 
 const center = { lat: 43.258227, lng: 76.8890358 };
 
+const config = {
+    googleMapsApiKey: "AIzaSyBgTcFoIhWsin6cdfqBwQS7TNbmC1iTPRM",
+    libraries: ["places"],
+};
+
 const MapPage = () => {
-    const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "AIzaSyBgTcFoIhWsin6cdfqBwQS7TNbmC1iTPRM",
-        libraries: ["places"],
-    });
+    const { isLoaded } = useJsApiLoader(config);
     const [map, setMap] = useState(/** @type google.maps.Map */ (null));
     const [add, setAdd] = useState(false);
 
@@ -45,11 +47,15 @@ const MapPage = () => {
             if (paths[i].length == 0) continue;
             let waypts = [];
             for (let j = 0; j < paths[i].length - 1; j++) {
+                console.log(paths[i][j]);
                 waypts.push({
                     location: addresses[paths[i][j]].address,
                     stopover: true,
                 });
             }
+
+            console.log(paths[i][paths[i].length - 1]);
+
             var request = {
                 origin: origin,
                 //destination: origin,
@@ -59,7 +65,6 @@ const MapPage = () => {
                 optimizeWaypoints: true,
             };
             directionsService.route(request, (result, status) => {
-                console.log(result.routes[0].legs[0].duration.text);
                 setDirectionsResponse((prev) => [...prev, result]);
             });
         }
@@ -71,6 +76,9 @@ const MapPage = () => {
         }
     }, [paths]);
 
+    console.log(paths);
+    console.log(directionsResponse);
+
     useEffect(() => {
         if (!add) {
             setAddresses([]);
@@ -80,7 +88,7 @@ const MapPage = () => {
             setActiveTruck(0);
             setPaths(null);
         }
-    });
+    }, [add]);
 
     if (!isLoaded) {
         return (
@@ -97,6 +105,28 @@ const MapPage = () => {
             </div>
         );
     }
+
+    const matchDirections = () => {
+        if (!paths || !addresses) return;
+
+        const currentPaths = paths[activeTruck].map((path) => addresses[path]);
+
+        const directions = directionsResponse.findIndex((direction) => {
+            const finalDestination = direction.request.destination.query;
+
+            return (
+                finalDestination ===
+                currentPaths.find((addr) => addr.address === finalDestination)
+                    ?.address
+            );
+        });
+
+        console.log(directions);
+
+        return directionsResponse[directions];
+    };
+
+    const direction = matchDirections();
 
     return (
         <div style={{ display: "flex", height: "100vh" }}>
@@ -128,9 +158,6 @@ const MapPage = () => {
                                 <div className="map__container-right">
                                     <SearchAddress
                                         setAddresses={setAddresses}
-                                        setDirectionsResponse={
-                                            setDirectionsResponse
-                                        }
                                     />
                                 </div>
                                 {addresses.length ? (
@@ -154,9 +181,7 @@ const MapPage = () => {
                                     <Marker position={center} />
                                     {directionsResponse && (
                                         <DirectionsRenderer
-                                            directions={
-                                                directionsResponse[activeTruck]
-                                            }
+                                            directions={direction}
                                             //draggable={true}
                                         />
                                     )}

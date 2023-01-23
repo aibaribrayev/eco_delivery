@@ -9,7 +9,7 @@ import SearchAddressAddItem from "./comp/SearchAddressAddItem";
 
 import "./SearchAddress.sass";
 
-const SearchAddress = ({ setAddresses, setDirectionsResponse }) => {
+const SearchAddress = ({ setAddresses }) => {
     const [addressFound, setAddressFound] = useState(false);
     const [items, setItems] = useState([]);
 

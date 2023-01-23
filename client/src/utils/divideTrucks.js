@@ -23,7 +23,6 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
 
     addresses.sort(compare);
     weights.sort();
-    console.log(weights);
     addresses.unshift({ lat: 43.3176583, lng: 76.971492 });
     let durations = new Array(addresses.length).fill([]);
 
@@ -142,12 +141,8 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
             path = reorderedPath;
         }
 
-        console.log("paths");
-        console.log(paths);
-
         for (let cycles = 0; cycles < 1000; cycles++) {
             let randomIndex = Math.floor(Math.random() * (n - 1)) + 1;
-            console.log(randomIndex);
             for (let i = 0; i < paths.length; i++) {
                 let isInPath = false,
                     indexInPath;
@@ -167,6 +162,7 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
                     let indexToTransfer = paths[i][paths[i].length - 1];
                     let curT = T - findMinimumTime(paths[i], durations)[0];
                     paths[i].pop();
+                    pathWeights[i] -= weights[indexToTransfer];
                     curT += findMinimumTime(paths[i], durations)[0];
                     let minTime = T,
                         pathIndex = i;
@@ -192,7 +188,7 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
                         paths[pathIndex],
                         durations
                     )[1];
-                    console.log(reorderedPath);
+                    pathWeights[pathIndex] += weights[indexToTransfer];
                     T = minTime;
                     break;
                 }
@@ -208,8 +204,6 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
         durations,
         weights
     );
-    console.log(durations);
-    console.log(paths);
 
     setPaths(paths);
 };

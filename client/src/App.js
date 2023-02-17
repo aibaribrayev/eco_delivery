@@ -1,9 +1,16 @@
-import { MapPage } from "./pages";
+import { useState } from "react";
+
+import { MapPage, SignPage } from "./pages";
 
 function App() {
+    const [isSigned, setIsSigned] = useState(false);
+
+    // login: ecoproduct
+    // password: Ecoproduct123
+
     return (
         <div className="App">
-            <MapPage />
+            {isSigned ? <MapPage /> : <SignPage setIsSigned={setIsSigned} />}
         </div>
     );
 }

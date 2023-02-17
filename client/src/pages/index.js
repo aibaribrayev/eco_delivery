@@ -1,2 +1,4 @@
 import MapPage from "./MapPage/MapPage";
-export { MapPage };
+import SignPage from "./SignPage/SignPage";
+
+export { MapPage, SignPage };

@@ -16,7 +16,7 @@ const TruckNumber = ({ setNumberOfTracks, addresses, setPaths }) => {
 
   return (
     <div className="search-address">
-      <div className="search-address__header">Кол-во машин</div>
+      <div className="search-address__header">Number of available trucks</div>
       <form className="search-address__form" onSubmit={handleSubmit}>
         <Input
           placeholder="Number of available trucks"

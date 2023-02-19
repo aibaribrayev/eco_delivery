@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/eco_delivery_/static/css/main.eeaad1a6.css",
-    "main.js": "/eco_delivery_/static/js/main.935dbcff.js",
-    "static/media/login-bg.png": "/eco_delivery_/static/media/login-bg.8358ca1456c40bfbd6e2.png",
-    "index.html": "/eco_delivery_/index.html",
-    "main.eeaad1a6.css.map": "/eco_delivery_/static/css/main.eeaad1a6.css.map",
-    "main.935dbcff.js.map": "/eco_delivery_/static/js/main.935dbcff.js.map"
+    "main.css": "/eco_delivery_.git%20/static/css/main.c209c535.css",
+    "main.js": "/eco_delivery_.git%20/static/js/main.935dbcff.js",
+    "static/media/login-bg.png": "/eco_delivery_.git%20/static/media/login-bg.8358ca1456c40bfbd6e2.png",
+    "index.html": "/eco_delivery_.git%20/index.html",
+    "main.c209c535.css.map": "/eco_delivery_.git%20/static/css/main.c209c535.css.map",
+    "main.935dbcff.js.map": "/eco_delivery_.git%20/static/js/main.935dbcff.js.map"
   },
   "entrypoints": [
-    "static/css/main.eeaad1a6.css",
+    "static/css/main.c209c535.css",
     "static/js/main.935dbcff.js"
   ]
 }

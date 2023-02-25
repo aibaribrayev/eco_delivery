@@ -68,7 +68,7 @@ const SearchAddress = ({ setAddresses }) => {
 
   return (
     <div className="search-address">
-      <div className="search-address__header">where to deliver? </div>
+      <div className="search-address__header"> Where to deliver? </div>
       <div className="search-address__form">
         <Autocomplete onPlaceChanged={handleChange} onLoad={onLoad}>
           <Input

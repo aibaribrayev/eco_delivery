@@ -34,7 +34,7 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
         continue;
       }
       const result = await axios.get(
-        `https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${addresses[i].lat},${addresses[i].lng}&destinations=${addresses[j].lat},${addresses[j].lng}&key=lkFL655EBcy1tyOKtvBDCjT0yzwev`,
+        `https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${addresses[i].lat},${addresses[i].lng}&destinations=${addresses[j].lat},${addresses[j].lng}&key=a09XCcTOlMk1etSHtWruRhuxN3VYo`,
         {
           mode: 'cors',
           credentials: 'same-origin',

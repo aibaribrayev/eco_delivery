@@ -22,6 +22,7 @@ const divideTrucks = async ({ addresses, numberOfTrucks, setPaths }) => {
   }
 
   addresses.sort(compare);
+
   weights.sort();
   addresses.unshift({ lat: 43.3176583, lng: 76.971492 });
   let durations = new Array(addresses.length).fill([]);
